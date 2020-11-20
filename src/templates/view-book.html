@@ -1,0 +1,116 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="columns">
+        <div class="column">
+            <h1 class="title">Book Details</h1>
+        </div>
+    </div>
+
+    <div class="columns is-multiline">
+        <div class="column is-12">
+            <a href="/books/{{book.id}}/edit" class="button is-small is-rounded">
+                <span class="icon">
+                    <i class="fa fa-edit"></i>
+                </span>
+                <span>Edit</span>
+            </a>
+
+            <a href="" class="button is-small is-rounded">
+                <span class="icon">
+                    <i class="fa fa-trash"></i>
+                </span>
+                <span>Delete</span>
+            </a>
+        </div>
+
+        <div class="column is-6">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth bold-title">
+                <tr>
+                    <td>Book ID</td>
+                    <td>{{book.id}}</td>
+                </tr>
+                <tr>
+                    <td>Title</td>
+                    <td><strong>{{book.title}}</strong></td>
+                </tr>
+                <tr>
+                    <td>ISBN</td>
+                    <td>{{book.isbn}}</td>
+                </tr>
+                <tr>
+                    <td>Author</td>
+                    <td>{{book.author}}</td>
+                </tr>
+                <tr>
+                    <td>Publisher</td>
+                    <td>{{book.publisher}}</td>
+                </tr>
+                <tr>
+                    <td>Language</td>
+                    <td>{{book.language}}</td>
+                </tr>
+                <tr>
+                    <td>Number of Pages</td>
+                    <td>{{book.numpages}}</td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>{{book.description}}</td>
+                </tr>
+                <tr>
+                    <td>Charge</td>
+                    <td>{{book.charge}}</td>
+                </tr>
+                <tr>
+                    <td>Rent Duration (days)</td>
+                    <td>{{book.rentduration}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="columns is-multiline">
+        <div class="column is-12">
+            <h1 class="title">Book Units</h1>
+        </div>
+
+        <div class="column is-6">
+            <div class="field">
+                <label class="label">Book Code</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="">
+                </div>
+                <!-- <p class="help">This is a help text</p> -->
+            </div>
+
+            <div class="tags has-addons">
+                <span class="tag is-success">Add</span>
+                <span class="tag">Remove</span>
+            </div>
+        </div>
+
+        <div class="column is-6"></div>
+
+        <div class="column is-6">
+            <table class="table is-fullwidth is-striped is-bordered is-hoverable">
+                <tr>
+                    <thead>
+                        <th>Sl</th>
+                        <th>Book Code</th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        <td>1</td>
+                        <td>2341234</td>
+                        <td>
+                            <a href="" class="button is-small is-danger is-rounded"><span class="icon"><i class="fa fa-trash"></i></span></a>
+                        </td>
+                    </tbody>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

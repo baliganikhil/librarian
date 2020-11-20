@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="columns">
+        <div class="column">
+            <h1 class="title">Customer Details</h1>
+        </div>
+    </div>
+
+    <div class="columns is-multiline">
+        <div class="column is-12">
+            <a href="" class="button is-success is-small is-rounded">
+                <span class="icon">
+                    <i class="fa fa-save"></i>
+                </span>
+                <span>Save</span>
+            </a>
+
+            <a href="/customers" class="button is-small is-rounded">
+                <span>Cancel</span>
+            </a>
+        </div>
+
+        <div class="column is-6">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth bold-title">
+                <tr>
+                    <td>Customer Name</td>
+                    <td><input type="text" class="input"></td>
+                </tr>
+                <tr>
+                    <td>Mobile</td>
+                    <td><input type="text" class="input"></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><input type="text" class="input"></td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td><input type="text" class="input"></td>
+                </tr>
+                <tr>
+                    <td>Gender</td>
+                    <td>
+                        <div class="select is-fullwidth">
+                            <select name="" id="" value="UNKNOWN">
+                                <option value="MALE">Male</option>
+                                <option value="FEMALE">Female</option>
+                                <option value="UNKNOWN">Unknown</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Date of Birth</td>
+                    <td><input type="date" class="input"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

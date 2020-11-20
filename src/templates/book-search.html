@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="columns">
+        <div class="column">
+            <h1 class="title">Books</h1>
+        </div>
+
+        <div class="column">
+            <a href="/books/add" class="button is-primary is-small is-rounded is-pulled-right">
+                <span class="icon"><i class="fa fa-plus"></i></span>
+                <span>New Book</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <div class="field has-addons">
+                <div class="control">
+                    <input class="input" type="text" placeholder="">
+                </div>
+                <div class="control">
+                    <a class="button is-info">
+                        Search
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="columns">
+        <div class="column">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Sl</th>
+                        <th>Title</th>
+                        <th>Available</th>
+                        <th>Author</th>
+                        <th>ISBN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><a href="/books/1">Harry Potter</a></td>
+                        <td>
+                            3
+                            <span class="is-pulled-right">
+                                <span class="tag is-success">Available</span>
+                                <!-- <span class="tag is-danger">Out of stock</span> -->
+                            </span>
+                        </td>
+                        <td>J K Rowling</td>
+                        <td>90786542324</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

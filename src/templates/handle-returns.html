@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="columns is-multiline">
+    <div class="column is-6">
+        <h1 class="title">Manage Returns</h1>
+    </div>
+
+    <div class="column is-6">
+        <a href="/customers" class="button is-small is-rounded is-pulled-right">
+            Go Back
+        </a>
+    </div>
+
+    <div class="column">
+        <div class="field">
+            <label class="label">Book Code</label>
+            <div class="control">
+                <input class="input" type="text" placeholder="">
+            </div>
+            <!-- <p class="help">This is a help text</p> -->
+        </div>
+    </div>
+</div>
+
+{% endblock %}

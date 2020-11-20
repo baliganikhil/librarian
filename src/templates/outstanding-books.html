@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="columns">
+        <div class="column">
+            <h1 class="title">Outstanding Books</h1>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Sl</th>
+                        <th>Book Title</th>
+                        <th>Customer Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><a href="/books/1">Harry Potter</a></td>
+                        <td><a href="/customers/1">Nikhil Baliga</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
