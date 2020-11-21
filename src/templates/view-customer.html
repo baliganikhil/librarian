@@ -1,6 +1,15 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+
+    {% if customer == None %}
+    <div class="notification is-danger">
+        <button class="delete is-hidden"></button>
+        We were unable to find this customer
+    </div>
+    {% endif %}
+
+    {% if customer != None %}
     <div class="columns">
         <div class="column">
             <h1 class="title">Customer Details</h1>
@@ -57,4 +66,6 @@
             </table>
         </div>
     </div>
+    {% endif %}
+
 {% endblock %}

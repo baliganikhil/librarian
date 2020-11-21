@@ -45,9 +45,14 @@ def bookEdit(bookId):
     r = BookService().get(bookId)
     return render_template('edit-book.html', book=r)
 
-@app.route('/books/add', methods = ['GET'])
+@app.route('/books/add', methods = ['GET', 'POST'])
 def bookAdd():
-    return render_template('add-book.html')
+    if request.method == 'GET':
+        return render_template('add-book.html', book=None)
+
+    bookObj = request.form
+    r = BookService().create(bookObj)
+    return render_template('add-book.html', book=r)
 
 @app.route('/books/outstanding', methods = ['GET'])
 def outstandingBooks():
@@ -55,21 +60,31 @@ def outstandingBooks():
 
 @app.route('/customers', methods = ['GET'])
 def customerList():
-    r = CustomerService().get(1)
-    return render_template('customer-search.html', customer=r)
+    r = CustomerService().listAll()
+    return render_template('customer-search.html', customers=r)
 @app.route('/customers/<customerId>', methods = ['GET'])
 def customerView(customerId):
     r = CustomerService().get(customerId)
     return render_template('view-customer.html', customer=r)
 
+@app.route('/customers/regnum', methods = ['GET'])
+def customerViewByRegnum():
+    regnum = request.args.get('regnum')
+    r = CustomerService().getByRegnum(regnum)
+    return render_template('customer-search.html', customers=r)
 @app.route('/customers/<customerId>/edit', methods = ['GET'])
 def customerEdit(customerId):
     r = CustomerService().get(customerId)
     return render_template('edit-customer.html', customer=r)
 
-@app.route('/customers/add', methods = ['GET'])
+@app.route('/customers/add', methods = ['GET', 'POST'])
 def customerAdd():
-    return render_template('add-customer.html')
+    if request.method == 'GET':
+        return render_template('add-customer.html', customer=None)
+
+    customerObj = request.form
+    r = CustomerService().create(customerObj)
+    return render_template('add-customer.html', customer=r)
 
 
 

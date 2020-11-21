@@ -16,20 +16,30 @@
 
     <div class="columns">
         <div class="column">
-            <div class="field has-addons">
-                <div class="control">
-                    <input class="input" type="text" placeholder="Regn Num">
+            <form action="/customers/regnum" method="GET">
+                <div class="field has-addons">
+                    <div class="control">
+                        <input class="input" name="regnum" type="text" placeholder="Regn Num">
+                    </div>
+                    <div class="control">
+                        <button class="button is-info" type="submit">
+                            Search
+                        </button>
+                    </div>
                 </div>
-                <div class="control">
-                    <a class="button is-info">
-                        Search
-                    </a>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
     <hr>
+
+    {% if customers | length != 0 %}
+
+    <div class="columns">
+        <div class="column">
+            <span class="tag">{{ customers | length }} Customer{% if customers | length != 1 %}s{% endif %} found</span>
+        </div>
+    </div>
 
     <div class="columns">
         <div class="column">
@@ -43,18 +53,29 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for customer in customers %}
                     <tr>
-                        <td>1</td>
-                        <td><a href="/customers/1">907865</a></td>
-                        <td>Nikhil Baliga</td>
+                        <td>{{loop.index}}</td>
+                        <td><a href="/customers/{{customer.id}}">{{customer.regnum}}</a></td>
+                        <td>{{customer.name}}</td>
                         <td>
-                            <a href="/manage-rentals/1" class="button is-small is-rounded">
+                            <a href="/manage-rentals/{{customer.id}}" class="button is-small is-rounded">
                                 Manage Rentals
                             </a>
                         </td>
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+
+    {% else %}
+
+    <div class="notification is-warning">
+        <button class="delete is-hidden"></button>
+        We were unable to find any customers
+    </div>
+
+    {% endif %}
 {% endblock %}

@@ -1,69 +1,77 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+
+    {% if book != None and book.id != None %}
+    <div class="notification is-success">
+        <button class="delete is-hidden"></button>
+        Book has been added successfully
+    </div>
+    {% endif %}
+
     <div class="columns">
         <div class="column">
             <h1 class="title">Book Details</h1>
         </div>
     </div>
 
-    <div class="columns is-multiline">
-        <div class="column is-12">
-            <a href="" class="button is-success is-small is-rounded">
-                <span class="icon">
-                    <i class="fa fa-save"></i>
-                </span>
-                <span>Save</span>
-            </a>
+    <form action="/books/add" method="POST">
 
-            <a href="/books" class="button is-small is-rounded">
-                <span>Cancel</span>
-            </a>
+        <div class="columns is-multiline">
+            <div class="column is-12">
+                <button type="submit" class="button is-success is-small is-rounded">
+                    <span class="icon">
+                        <i class="fa fa-save"></i>
+                    </span>
+                    <span>Save</span>
+                </button>
+
+                <a href="/books" class="button is-small is-rounded">
+                    <span>Cancel</span>
+                </a>
+            </div>
+
+            <div class="column is-6">
+                <table class="table is-bordered is-striped is-hoverable is-fullwidth bold-title">
+                    <tr>
+                        <td>Title</td>
+                        <td><strong><input type="text" name="title" value="Lord of the Rings" class="input"></strong></td>
+                    </tr>
+                    <tr>
+                        <td>ISBN</td>
+                        <td><input type="text" name="isbn" value="123456" class="input"></td>
+                    </tr>
+                    <tr>
+                        <td>Author</td>
+                        <td><input type="text" name="author" value="JRR Tolkien" class="input"></td>
+                    </tr>
+                    <tr>
+                        <td>Publisher</td>
+                        <td><input type="text" name="publisher" value="" class="input"></td>
+                    </tr>
+                    <tr>
+                        <td>Language</td>
+                        <td><input type="text" name="language" value="English" class="input"></td>
+                    </tr>
+                    <tr>
+                        <td>Number of Pages</td>
+                        <td><input type="number" name="numpages" value=0 class="input"></td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td><input type="text" name="description" value="" class="input"></td>
+                    </tr>
+                    <tr>
+                        <td>Charge</td>
+                        <td><input type="number" name="charge" value=5 class="input"></td>
+                    </tr>
+                    <tr>
+                        <td>Rent Duration (days)</td>
+                        <td><input type="number" name="rentduration" value=7 class="input"></td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
-        <div class="column is-6">
-            <table class="table is-bordered is-striped is-hoverable is-fullwidth bold-title">
-                <tr>
-                    <td>Book ID</td>
-                    <td><input type="text" value="" class="input"></td>
-                </tr>
-                <tr>
-                    <td>Title</td>
-                    <td><strong><input type="text" value="" class="input"></strong></td>
-                </tr>
-                <tr>
-                    <td>ISBN</td>
-                    <td><input type="text" value="" class="input"></td>
-                </tr>
-                <tr>
-                    <td>Author</td>
-                    <td><input type="text" value="" class="input"></td>
-                </tr>
-                <tr>
-                    <td>Publisher</td>
-                    <td><input type="text" value="" class="input"></td>
-                </tr>
-                <tr>
-                    <td>Language</td>
-                    <td><input type="text" value="" class="input"></td>
-                </tr>
-                <tr>
-                    <td>Number of Pages</td>
-                    <td><input type="number" value=0 class="input"></td>
-                </tr>
-                <tr>
-                    <td>Description</td>
-                    <td><input type="text" value="" class="input"></td>
-                </tr>
-                <tr>
-                    <td>Charge</td>
-                    <td><input type="number" value=5 class="input"></td>
-                </tr>
-                <tr>
-                    <td>Rent Duration (days)</td>
-                    <td><input type="number" value=7 class="input"></td>
-                </tr>
-            </table>
-        </div>
-    </div>
+    </form>
 {% endblock %}
