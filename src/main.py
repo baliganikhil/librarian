@@ -1,6 +1,10 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
+from flask.helpers import url_for
 from flask_sqlalchemy import SQLAlchemy
 import os
+import json
+
+from utils.encoder import DateTimeEncoder
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db/librarian.db')
@@ -8,12 +12,12 @@ db = SQLAlchemy(app)
 
 from services.customer import CustomerService
 from services.book import BookService
+from services.bookunit import BookunitService
+from services.rental import RentalService
 
 @app.route('/')
 def hello_world():
     r = CustomerService().get(1)
-    print(r)
-    print(r.name)
 
     # print(r.fetchall())
     # print(dir(r))
@@ -23,9 +27,29 @@ def hello_world():
 def bookList():
     return render_template('book-search.html')
 
-@app.route('/manage-rentals/<customerId>', methods = ['GET'])
-def manageRentals(customerId):
-    return render_template('manage-rentals.html')
+@app.route('/rentals/add/<customerId>', methods = ['GET', 'POST'])
+def addRentals(customerId):
+    activeRentals = RentalService().listActiveForCustomer(customerId)
+
+    if request.method == 'GET':
+        return render_template('manage-rentals.html', customerId=customerId, cart=[], cartStr='[]', activeRentals=activeRentals)
+
+    rentalObj = request.form
+    barcode = rentalObj.get('barcode')
+
+    cart = json.loads(rentalObj.get('cart', '[]'))
+    cart = RentalService().addToCart(customerId, barcode, cart)
+    cartStr = json.dumps(cart, cls=DateTimeEncoder)
+
+    return render_template('manage-rentals.html', customerId=customerId, cart=cart, cartStr=cartStr, activeRentals=activeRentals)
+
+@app.route('/rentals/confirm/<customerId>', methods = ['POST'])
+def confirmRentals(customerId):
+    rentalObj = request.form
+
+    cart = json.loads(rentalObj.get('cart'))
+    RentalService().create(cart)
+    return redirect(url_for('addRentals', customerId=customerId))
 
 @app.route('/manage-returns', methods = ['GET'])
 def manageReturns():
@@ -37,8 +61,9 @@ def bookSearch():
 
 @app.route('/books/<bookId>', methods = ['GET'])
 def bookView(bookId):
-    r = BookService().get(bookId)
-    return render_template('view-book.html', book=r)
+    book = BookService().get(bookId)
+
+    return render_template('view-book.html', book=book)
 
 @app.route('/books/<bookId>/edit', methods = ['GET'])
 def bookEdit(bookId):
@@ -53,6 +78,21 @@ def bookAdd():
     bookObj = request.form
     r = BookService().create(bookObj)
     return render_template('add-book.html', book=r)
+
+@app.route('/book-unit/add', methods = ['POST'])
+def bookunitAdd():
+    bookunitObj = request.form
+    bookId = bookunitObj.get('bookId')
+
+    r = BookunitService().create(bookunitObj)
+
+    return redirect(url_for('bookView', bookId=bookId))
+
+@app.route('/book-unit/<bookId>/<bookunitId>/delete', methods = ['GET'])
+def bookunitDelete(bookId, bookunitId):
+    r = BookunitService().delete(bookunitId)
+
+    return redirect(url_for('bookView', bookId=bookId))
 
 @app.route('/books/outstanding', methods = ['GET'])
 def outstandingBooks():

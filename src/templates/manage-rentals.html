@@ -14,15 +14,59 @@
     </div>
 
     <div class="column">
-        <div class="field">
-            <label class="label">Book Code</label>
-            <div class="control">
-                <input class="input" type="text" placeholder="">
+        <form action="/rentals/add/{{customerId}}" method="POST">
+            <div class="field">
+                <label class="label">Book Code</label>
+                <div class="control">
+                    <input class="input" name="barcode" type="text" placeholder="">
+                </div>
+                <!-- <p class="help">This is a help text</p> -->
             </div>
-            <!-- <p class="help">This is a help text</p> -->
-        </div>
+
+            <input type="hidden" name="cart" value="{{ cartStr }}">
+        </form>
     </div>
 </div>
+
+<hr>
+{% if cart | length > 0 %}
+<div class="columns is-multiline">
+    <div class="column is-12">
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <tr>
+                <th>Sl</th>
+                <th>Title</th>
+                <th>Book Unit</th>
+                <th>Due Date</th>
+                <th>Charge</th>
+                <th></th>
+            </tr>
+            {% for cartItem in cart %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ cartItem.title }}</td>
+                <td>{{ cartItem.bookunitId }}</td>
+                <td><input type="date" class="input" name="duedate"></td>
+                <td><input type="number" class="input" name="charge"></td>
+                <td>
+                    <button class="button is-small is-rounded is-danger"><span class="icon"><i class="fa fa-trash"></i></span></button>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="column">
+        <form action="/rentals/confirm/{{customerId}}" method="POST">
+            <input type="hidden" name="cart" value="{{ cartStr }}">
+
+            <button class="button is-small is-rounded is-primary">
+                Confirm Rental{% if cart | length > 1 %}s{% endif %}
+            </button>
+        </form>
+    </div>
+</div>
+{% endif %}
 
 <hr>
 
@@ -39,20 +83,24 @@
                 <th>Book Unit</th>
                 <th>Rented On</th>
                 <th>Return Date</th>
+                <th>Charge</th>
                 <th></th>
             </tr>
+            {% for activeRental in activeRentals %}
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ loop.index }}</td>
+                <td>{{ activeRental.title }}</td>
+                <td>{{ activeRental.bookunitId }}</td>
+                <td>{{ activeRental.createdat.strftime('%d-%m-%Y') }}</td>
+                <td>{{ activeRental.duedate.strftime('%d-%m-%Y') }}</td>
+                <td>{{ activeRental.charge }}</td>
                 <td>
                     <a href="" class="button is-small is-rounded">
                         Return
                     </a>
                 </td>
             </tr>
+            {% endfor %}
         </table>
     </div>
 </div>
@@ -62,7 +110,7 @@
 
 <div class="columns is-multiline">
     <div class="column is-12">
-        <h1 class="title">Previous Rentals</h1>
+        <h2 class="subtitle">Previous Rentals</h2>
     </div>
 
     <div class="column">

@@ -78,18 +78,22 @@
         </div>
 
         <div class="column is-6">
-            <div class="field">
-                <label class="label">Book Code</label>
-                <div class="control">
-                    <input class="input" type="text" placeholder="">
+            <form action="/book-unit/add" method="POST">
+                <div class="field">
+                    <label class="label">Book Code</label>
+                    <div class="control">
+                        <input class="input" name="barcode" type="text" placeholder="">
+                    </div>
+                    <!-- <p class="help">This is a help text</p> -->
                 </div>
-                <!-- <p class="help">This is a help text</p> -->
-            </div>
 
-            <div class="tags has-addons">
-                <span class="tag is-success">Add</span>
-                <span class="tag">Remove</span>
-            </div>
+                <input type="hidden" name="bookId" value="{{book.id}}">
+
+                <div class="tags has-addons">
+                    <span class="tag is-success">Add</span>
+                    <span class="tag">Remove</span>
+                </div>
+            </form>
         </div>
 
         <div class="column is-6"></div>
@@ -98,16 +102,24 @@
             <table class="table is-fullwidth is-striped is-bordered is-hoverable">
                 <tr>
                     <thead>
-                        <th>Sl</th>
-                        <th>Book Code</th>
-                        <th></th>
+                        <tr>
+                            <th>Sl</th>
+                            <th>Book Code</th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody>
-                        <td>1</td>
-                        <td>2341234</td>
-                        <td>
-                            <a href="" class="button is-small is-danger is-rounded"><span class="icon"><i class="fa fa-trash"></i></span></a>
-                        </td>
+                        {% for bookunit in book.bookunits %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{ bookunit.barcode }}</td>
+                            <td>
+                                <form action="/book-unit/{{book.id}}/{{bookunit.id}}/delete" method="GET">
+                                    <button type="submit" class="button is-small is-danger is-rounded"><span class="icon"><i class="fa fa-trash"></i></span></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </tr>
             </table>

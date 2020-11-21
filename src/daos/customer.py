@@ -38,6 +38,7 @@ class CustomerDAO(BaseDAO):
             email = customer.get('email'),
             address = customer.get('address'),
             blacklisted = customer.get('blacklisted'),
+            membership = customer.get('membership'),
             createdat = now,
             updatedat = now,
             createdby = customer.get('createdby'),

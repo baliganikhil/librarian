@@ -15,3 +15,4 @@ class Customers(db.Model, SerializerMixin):
     updatedby = db.Column(db.String(40))
     gender = db.Column(db.String(40))
     dob = db.Column(db.DateTime(40))
+    membership = db.Column(db.String(40))

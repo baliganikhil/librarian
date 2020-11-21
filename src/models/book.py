@@ -19,3 +19,4 @@ class Books(db.Model, SerializerMixin):
     updatedat = db.Column(db.DateTime(40))
     createdby = db.Column(db.String(40))
     updatedby = db.Column(db.String(40))
+    bookunits = db.relationship('Bookunits', backref='books', lazy=True)
