@@ -48,8 +48,24 @@ class RentalDAO(BaseDAO):
         rentals = Rentals.query.filter_by(customerId=customerId, status=RentalStatus.get('RENTED')).all()
         return rentals
 
+    def listHistoryForCustomer(self, customerId):
+        rentals = Rentals.query.filter_by(customerId=customerId, status=RentalStatus.get('RETURNED')).all()
+        return rentals
+
     def delete(self, rentalId):
         rental = Rentals.query.get(rentalId)
         db.session.delete(rental)
         db.session.commit()
         return 'Rental has been deleted successfully'
+
+    def markReturned(self, rentalIds):
+        rows = Rentals.query.filter(Rentals.id.in_(rentalIds)).all()
+        for row in rows:
+            row.status = RentalStatus.get('RETURNED')
+
+        db.session.commit()
+        return 'Rentals marked successfully as returned'
+
+    def getRentalForReturn(self, bookunitId):
+        rental = Rentals.query.filter_by(bookunitId=bookunitId, status=RentalStatus.get('RENTED')).first()
+        return rental

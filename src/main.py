@@ -30,9 +30,10 @@ def bookList():
 @app.route('/rentals/add/<customerId>', methods = ['GET', 'POST'])
 def addRentals(customerId):
     activeRentals = RentalService().listActiveForCustomer(customerId)
+    historicRentals = RentalService().listHistoryForCustomer(customerId)
 
     if request.method == 'GET':
-        return render_template('manage-rentals.html', customerId=customerId, cart=[], cartStr='[]', activeRentals=activeRentals)
+        return render_template('manage-rentals.html', customerId=customerId, cart=[], cartStr='[]', activeRentals=activeRentals, historicRentals=historicRentals)
 
     rentalObj = request.form
     barcode = rentalObj.get('barcode')
@@ -40,8 +41,9 @@ def addRentals(customerId):
     cart = json.loads(rentalObj.get('cart', '[]'))
     cart = RentalService().addToCart(customerId, barcode, cart)
     cartStr = json.dumps(cart, cls=DateTimeEncoder)
+    totalCharge = RentalService().getTotalCharge(cart)
 
-    return render_template('manage-rentals.html', customerId=customerId, cart=cart, cartStr=cartStr, activeRentals=activeRentals)
+    return render_template('manage-rentals.html', customerId=customerId, cart=cart, cartStr=cartStr, activeRentals=activeRentals, historicRentals=historicRentals, totalCharge=totalCharge)
 
 @app.route('/rentals/confirm/<customerId>', methods = ['POST'])
 def confirmRentals(customerId):
@@ -53,7 +55,34 @@ def confirmRentals(customerId):
 
 @app.route('/manage-returns', methods = ['GET'])
 def manageReturns():
-    return render_template('handle-returns.html')
+    return render_template('handle-returns.html', cart=[], cartStr='[]')
+
+@app.route('/returns/add', methods = ['POST'])
+def addReturns():
+    error = None
+    rentalObj = request.form
+    barcode = rentalObj.get('barcode')
+
+    cart = json.loads(rentalObj.get('cart', '[]'))
+    totalCharge = RentalService().getTotalCharge(cart)
+
+    try:
+        cart = RentalService().addToReturnCart( barcode, cart)
+        totalCharge = RentalService().getTotalCharge(cart)
+    except Exception as e:
+        error = e.args[0]
+
+    cartStr = json.dumps(cart, cls=DateTimeEncoder)
+
+    return render_template('handle-returns.html', cart=cart, cartStr=cartStr, totalCharge=totalCharge, error=error)
+
+@app.route('/returns/confirm', methods = ['POST'])
+def confirmReturns():
+    rentalObj = request.form
+
+    cart = json.loads(rentalObj.get('cart'))
+    RentalService().returnRentals(cart)
+    return redirect(url_for('manageReturns'))
 
 @app.route('/books', methods = ['GET'])
 def bookSearch():

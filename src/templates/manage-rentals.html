@@ -28,8 +28,8 @@
     </div>
 </div>
 
-<hr>
 {% if cart | length > 0 %}
+<hr>
 <div class="columns is-multiline">
     <div class="column is-12">
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
@@ -46,13 +46,21 @@
                 <td>{{ loop.index }}</td>
                 <td>{{ cartItem.title }}</td>
                 <td>{{ cartItem.bookunitId }}</td>
-                <td><input type="date" class="input" name="duedate"></td>
-                <td><input type="number" class="input" name="charge"></td>
+                <td><input type="date" class="input" name="duedate" value="{{ cartItem.duedate }}"></td>
+                <td><input type="number" class="input" name="charge" value="{{ cartItem.charge }}"></td>
                 <td>
                     <button class="button is-small is-rounded is-danger"><span class="icon"><i class="fa fa-trash"></i></span></button>
                 </td>
             </tr>
             {% endfor %}
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Rs {{ totalCharge }}</th>
+                <th></th>
+            </tr>
         </table>
     </div>
 
@@ -75,6 +83,7 @@
         <h1 class="title">Active Rentals</h1>
     </div>
 
+    {% if activeRentals | length > 0 %}
     <div class="column">
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
             <tr>
@@ -103,6 +112,17 @@
             {% endfor %}
         </table>
     </div>
+    {% endif %}
+
+    {% if activeRentals | length == 0 %}
+    <div class="column">
+        <article class="message is-warning">
+            <div class="message-body">
+                No active rentals were found
+            </div>
+        </article>
+    </div>
+    {% endif %}
 </div>
 
 
@@ -113,6 +133,7 @@
         <h2 class="subtitle">Previous Rentals</h2>
     </div>
 
+    {% if historicRentals | length > 0 %}
     <div class="column">
         <table class="table is-bordered is-striped is-hoverable is-fullwidth">
             <tr>
@@ -121,18 +142,31 @@
                 <th>Book Unit</th>
                 <th>Rented On</th>
                 <th>Return Date</th>
-                <th>Comments</th>
+                <th>Charge</th>
             </tr>
+            {% for historicRental in historicRentals %}
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ loop.index }}</td>
+                <td>{{ historicRental.title }}</td>
+                <td>{{ historicRental.bookunitId }}</td>
+                <td>{{ historicRental.createdat.strftime('%d-%m-%Y') }}</td>
+                <td>{{ historicRental.duedate.strftime('%d-%m-%Y') }}</td>
+                <td>{{ historicRental.charge }}</td>
             </tr>
+            {% endfor %}
         </table>
     </div>
+    {% endif %}
+
+    {% if historicRentals | length == 0 %}
+    <div class="column">
+        <article class="message is-warning">
+            <div class="message-body">
+                No historic rentals were found
+            </div>
+        </article>
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}
