@@ -25,10 +25,13 @@ def hello_world():
 
 @app.route('/book-search', methods = ['GET'])
 def bookList():
-    return render_template('book-search.html')
+    title = request.args.get('title', '')
+    searchResults = BookService().search(title)
+    return render_template('book-search.html', searchResults=searchResults, title=title)
 
 @app.route('/rentals/add/<customerId>', methods = ['GET', 'POST'])
 def addRentals(customerId):
+    error = None
     activeRentals = RentalService().listActiveForCustomer(customerId)
     historicRentals = RentalService().listHistoryForCustomer(customerId)
 
@@ -39,11 +42,18 @@ def addRentals(customerId):
     barcode = rentalObj.get('barcode')
 
     cart = json.loads(rentalObj.get('cart', '[]'))
-    cart = RentalService().addToCart(customerId, barcode, cart)
-    cartStr = json.dumps(cart, cls=DateTimeEncoder)
-    totalCharge = RentalService().getTotalCharge(cart)
 
-    return render_template('manage-rentals.html', customerId=customerId, cart=cart, cartStr=cartStr, activeRentals=activeRentals, historicRentals=historicRentals, totalCharge=totalCharge)
+    try:
+        cart = RentalService().addToRentalCart(customerId, barcode, cart)
+    except Exception as e:
+        error = e.args[0]
+    finally:
+        cart, totalCharge = RentalService().processCartForDisplay(cart)
+
+    # cart, totalCharge = RentalService().processCartForDisplay(cart)
+    cartStr = json.dumps(cart, cls=DateTimeEncoder)
+
+    return render_template('manage-rentals.html', customerId=customerId, cart=cart, cartStr=cartStr, activeRentals=activeRentals, historicRentals=historicRentals, totalCharge=totalCharge, error=error)
 
 @app.route('/rentals/confirm/<customerId>', methods = ['POST'])
 def confirmRentals(customerId):
@@ -64,13 +74,13 @@ def addReturns():
     barcode = rentalObj.get('barcode')
 
     cart = json.loads(rentalObj.get('cart', '[]'))
-    totalCharge = RentalService().getTotalCharge(cart)
 
     try:
         cart = RentalService().addToReturnCart( barcode, cart)
-        totalCharge = RentalService().getTotalCharge(cart)
     except Exception as e:
         error = e.args[0]
+    finally:
+        cart, totalCharge = RentalService().processCartForDisplay(cart)
 
     cartStr = json.dumps(cart, cls=DateTimeEncoder)
 
@@ -81,8 +91,8 @@ def confirmReturns():
     rentalObj = request.form
 
     cart = json.loads(rentalObj.get('cart'))
-    RentalService().returnRentals(cart)
-    return redirect(url_for('manageReturns'))
+    _, successMsg = RentalService().returnRentals(cart)
+    return render_template('handle-returns.html', cart=[], cartStr='[]', successMsg=successMsg)
 
 @app.route('/books', methods = ['GET'])
 def bookSearch():

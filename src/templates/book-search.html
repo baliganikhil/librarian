@@ -16,16 +16,18 @@
 
     <div class="columns">
         <div class="column">
-            <div class="field has-addons">
-                <div class="control">
-                    <input class="input" type="text" placeholder="">
+            <form action="/book-search" method="GET">
+                <div class="field has-addons">
+                    <div class="control">
+                        <input class="input" type="text" name="title" placeholder="" value="{{title}}">
+                    </div>
+                    <div class="control">
+                        <button type="submit" class="button is-info">
+                            Search
+                        </button>
+                    </div>
                 </div>
-                <div class="control">
-                    <a class="button is-info">
-                        Search
-                    </a>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -38,25 +40,27 @@
                     <tr>
                         <th>Sl</th>
                         <th>Title</th>
-                        <th>Available</th>
+                        <th class="is-hidden">Available</th>
                         <th>Author</th>
                         <th>ISBN</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for result in searchResults %}
                     <tr>
-                        <td>1</td>
-                        <td><a href="/books/1">Harry Potter</a></td>
-                        <td>
+                        <td>{{ loop.index }}</td>
+                        <td><a href="/books/{{result.id}}">{{result.title}}</a></td>
+                        <td class="is-hidden">
                             3
                             <span class="is-pulled-right">
                                 <span class="tag is-success">Available</span>
                                 <!-- <span class="tag is-danger">Out of stock</span> -->
                             </span>
                         </td>
-                        <td>J K Rowling</td>
-                        <td>90786542324</td>
+                        <td>{{result.author}}</td>
+                        <td>{{result.isbn}}</td>
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

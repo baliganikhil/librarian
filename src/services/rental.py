@@ -7,34 +7,49 @@ from services.book import BookService
 from services.bookunit import BookunitService
 
 class RentalService(BaseService):
-    def getTotalCharge(self, cart):
+    def processCartForDisplay(self, cart):
         totalCharge = 0
         for cartItem in cart:
             totalCharge = totalCharge + cartItem.get('charge', 0)
+            cartItem['duedate'] = datetime.strptime(cartItem.get('duedate'), '%Y-%m-%d %H:%M:%S')
 
-        return totalCharge
+        return cart, totalCharge
 
     def get(self, rentalId):
         r = RentalDAO().get(rentalId)
         return r
 
-    def addToCart(self, customerId, bookBarcode, cart):
+    def addToRentalCart(self, customerId, bookBarcode, cart):
         bookunit = BookunitService().getByBarcode(bookBarcode)
+
+        # Check if the incoming book unit is a valid book
+        if bookunit == None:
+            raise Exception('Invalid barcode - No such book found')
+
         bookunitId = bookunit.id
         bookId = bookunit.bookId
+
+        # Check if the book unit has already been added
+        for cartItem in cart:
+            if cartItem.get('bookunitId') == bookunitId:
+                raise Exception('Duplicate barcode - This book was already scanned')
+
+        # Throw an error if book was already rented
+        rentalObj = RentalDAO().getRentalForReturn(bookunitId)
+        if rentalObj != None:
+            raise Exception('Invalid barcode - This book is already rented')
 
         book = BookService().get(bookId)
         rentduration = book.rentduration
         charge = book.charge
 
         now = datetime.now()
-        # today = datetime.strptime(now, "%d/%m/%y")
         duedate = now + timedelta(days=rentduration)
 
         rentalObj = {
             'bookunitId': bookunitId,
             'customerId': customerId,
-            'duedate': duedate,
+            'duedate': duedate.strftime('%Y-%m-%d %H:%M:%S'),
             'status': RentalStatus.get('RENTED'),
             'comments': '',
             'charge': charge,
@@ -49,20 +64,28 @@ class RentalService(BaseService):
     def addToReturnCart(self, bookBarcode, cart):
         bookunit = BookunitService().getByBarcode(bookBarcode)
 
+        # Check if the incoming book unit is a valid book
         if bookunit == None:
             raise Exception('Invalid barcode - No such book found')
+
+        # Check if the book unit has already been added
+        for cartItem in cart:
+            if cartItem.get('bookunitId') == bookunit.id:
+                raise Exception('Duplicate barcode - This book was already scanned')
 
         bookunitId = bookunit.id
 
         rentalObj = RentalDAO().getRentalForReturn(bookunitId)
+
+        # Throw an error if a valid rental was not found
+        if rentalObj == None:
+            raise Exception('Invalid barcode - No active rental found')
+
         book = BookService().get(bookunit.bookId)
 
         curCartItem = rentalObj.to_dict()
         curCartItem['title'] = book.title
         cart.append(curCartItem)
-
-        for cartItem in cart:
-            cartItem['duedate'] = datetime.strptime(cartItem.get('duedate'), '%Y-%m-%d %H:%M:%S')
 
         return cart
 
@@ -71,7 +94,7 @@ class RentalService(BaseService):
         for cartItem in cart:
             rentalIds.append(cartItem.get('id'))
 
-        return RentalDAO().markReturned(rentalIds)
+        return RentalDAO().markReturned(rentalIds), 'Rentals were marked as returned'
 
 
     def create(self, cart):

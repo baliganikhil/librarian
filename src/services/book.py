@@ -14,3 +14,6 @@ class BookService(BaseService):
 
     def delete(self, bookId):
         return BookDAO().delete(bookId)
+
+    def search(self, title):
+        return BookDAO().search(title)

@@ -73,3 +73,6 @@ class BookDAO(BaseDAO):
         db.session.delete(book)
         db.session.commit()
         return 'Book has been deleted successfully'
+
+    def search(self, title):
+        return Books.query.filter(Books.title.ilike(f'%{title}%')).all()

@@ -2,6 +2,18 @@
 
 {% block content %}
 
+{% if error %}
+<article class="message is-danger">
+    <div class="message-header">
+        <p>Uh oh!</p>
+        <!-- <button class="delete" aria-label="delete"></button> -->
+    </div>
+    <div class="message-body">
+        {{error}}
+    </div>
+</article>
+{% endif %}
+
 <div class="columns is-multiline">
     <div class="column is-6">
         <h1 class="title">Add Rental</h1>

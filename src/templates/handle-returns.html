@@ -14,6 +14,18 @@
 </article>
 {% endif %}
 
+{% if successMsg %}
+<article class="message is-success">
+    <div class="message-header">
+        <p>Great!</p>
+        <!-- <button class="delete" aria-label="delete"></button> -->
+    </div>
+    <div class="message-body">
+        {{successMsg}}
+    </div>
+</article>
+{% endif %}
+
 <div class="columns is-multiline">
     <div class="column is-6">
         <h1 class="title">Manage Returns</h1>
