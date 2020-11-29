@@ -3,5 +3,21 @@ from daos.customer import CustomerDAO
 
 class CustomerService(BaseService):
     def get(self, customerId):
-        return CustomerDAO().get(customerId)
-        # pass
+        r = CustomerDAO().get(customerId)
+        return r
+
+    def getByRegnum(self, regnum):
+        r = CustomerDAO().getByRegnum(regnum)
+        return r
+
+    def create(self, customerObj):
+        return CustomerDAO().insert(customerObj)
+
+    def update(self, customerId, customerObj):
+        return CustomerDAO().update(customerId, customerObj)
+
+    def delete(self, customerId):
+        return CustomerDAO().delete(customerId)
+
+    def listAll(self):
+        return CustomerDAO().listAll()

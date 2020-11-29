@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="columns">
+        <div class="column">
+            <h1 class="title">Outstanding Books</h1>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Sl</th>
+                        <th>Book Title</th>
+                        <th>Customer Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for outstandingRental in outstandingRentals %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td><a href="/books/{{outstandingRental.bookId}}">{{ outstandingRental.title }}</a></td>
+                        <td><a href="/customers/{{outstandingRental.customerId}}">{{ outstandingRental.customerName }}</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

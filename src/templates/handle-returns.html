@@ -1,0 +1,104 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+{% if error %}
+<article class="message is-danger">
+    <div class="message-header">
+        <p>Uh oh!</p>
+        <!-- <button class="delete" aria-label="delete"></button> -->
+    </div>
+    <div class="message-body">
+        {{error}}
+    </div>
+</article>
+{% endif %}
+
+{% if successMsg %}
+<article class="message is-success">
+    <div class="message-header">
+        <p>Great!</p>
+        <!-- <button class="delete" aria-label="delete"></button> -->
+    </div>
+    <div class="message-body">
+        {{successMsg}}
+    </div>
+</article>
+{% endif %}
+
+<div class="columns is-multiline">
+    <div class="column is-6">
+        <h1 class="title">Manage Returns</h1>
+    </div>
+
+    <div class="column is-6">
+        <a href="/customers" class="button is-small is-rounded is-pulled-right">
+            Go Back
+        </a>
+    </div>
+
+    <div class="column">
+        <form action="/returns/add" method="POST">
+            <div class="field">
+                <label class="label">Book Code</label>
+                <div class="control">
+                    <input class="input" name="barcode" type="text" placeholder="" id="txtReturnBarcode">
+                </div>
+                <!-- <p class="help">This is a help text</p> -->
+            </div>
+
+            <input type="hidden" name="cart" value="{{ cartStr }}">
+        </form>
+    </div>
+</div>
+
+<hr>
+{% if cart | length > 0 %}
+<div class="columns is-multiline">
+    <div class="column is-12">
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <tr>
+                <th>Sl</th>
+                <th>Title</th>
+                <th>Book Unit</th>
+                <th>Due Date</th>
+                <th>Charge</th>
+            </tr>
+            {% for cartItem in cart %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ cartItem.title }}</td>
+                <td>{{ cartItem.bookunitId }}</td>
+                <td>{{ cartItem.duedate.strftime('%d-%m-%Y') }}</td>
+                <td><input class="input" type="number" value="{{ cartItem.charge }}"></td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Rs {{ totalCharge }}</th>
+            </tr>
+        </table>
+    </div>
+
+    <div class="column">
+        <form action="/returns/confirm" method="POST">
+            <input type="hidden" name="cart" value="{{ cartStr }}">
+
+            <button class="button is-small is-rounded is-warning">
+                Confirm Return{% if cart | length > 1 %}s{% endif %}
+            </button>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    $(document).ready(() => {
+        $('#txtReturnBarcode').focus();
+    });
+</script>
+
+{% endblock %}

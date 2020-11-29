@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="columns">
+        <div class="column">
+            <h1 class="title">Customers</h1>
+        </div>
+
+        <div class="column">
+            <a href="/customers/add" class="button is-primary is-small is-rounded is-pulled-right">
+                <span class="icon"><i class="fa fa-plus"></i></span>
+                <span>New Customer</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <form action="/customers/regnum" method="GET">
+                <div class="field has-addons">
+                    <div class="control">
+                        <input class="input" name="regnum" type="text" placeholder="Regn Num">
+                    </div>
+                    <div class="control">
+                        <button class="button is-info" type="submit">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <hr>
+
+    {% if customers | length != 0 %}
+
+    <div class="columns">
+        <div class="column">
+            <span class="tag">{{ customers | length }} Customer{% if customers | length != 1 %}s{% endif %} found</span>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Sl</th>
+                        <th>Regn No</th>
+                        <th>Customer Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr>
+                        <td>{{loop.index}}</td>
+                        <td><a href="/customers/{{customer.id}}">{{customer.regnum}}</a></td>
+                        <td>{{customer.name}}</td>
+                        <td>
+                            <a href="/rentals/add/{{customer.id}}" class="button is-small is-rounded">
+                                Manage Rentals
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% else %}
+
+
+    <article class="message is-warning">
+        <div class="message-body">
+            We were unable to find any customers
+        </div>
+    </article>
+
+    {% endif %}
+{% endblock %}

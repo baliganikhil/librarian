@@ -1,0 +1,7 @@
+.navbar {
+    margin-bottom: 30px;
+}
+
+.bold-title tr td:first-child {
+    font-weight: 600;
+}

@@ -1,0 +1,135 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="columns">
+        <div class="column">
+            <h1 class="title">Book Details</h1>
+        </div>
+    </div>
+
+    <div class="columns is-multiline">
+        <div class="column is-4">
+            <a href="/books/{{book.id}}/edit" class="button is-small is-rounded">
+                <span class="icon">
+                    <i class="fa fa-edit"></i>
+                </span>
+                <span>Edit</span>
+            </a>
+
+            <a href="" class="button is-small is-rounded">
+                <span class="icon">
+                    <i class="fa fa-trash"></i>
+                </span>
+                <span>Delete</span>
+            </a>
+        </div>
+
+        <div class="column is-2">
+            <a href="/books" class="button is-small is-rounded is-pulled-right">
+                <span>Close</span>
+            </a>
+        </div>
+        <div class="column"></div>
+
+        <div class="column is-6">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth bold-title">
+                <tr>
+                    <td>Book ID</td>
+                    <td>{{book.id}}</td>
+                </tr>
+                <tr>
+                    <td>Title</td>
+                    <td><strong>{{book.title}}</strong></td>
+                </tr>
+                <tr>
+                    <td>ISBN</td>
+                    <td>{{book.isbn}}</td>
+                </tr>
+                <tr>
+                    <td>Author</td>
+                    <td>{{book.author}}</td>
+                </tr>
+                <tr>
+                    <td>Publisher</td>
+                    <td>{{book.publisher}}</td>
+                </tr>
+                <tr>
+                    <td>Language</td>
+                    <td>{{book.language}}</td>
+                </tr>
+                <tr>
+                    <td>Number of Pages</td>
+                    <td>{{book.numpages}}</td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>{{book.description}}</td>
+                </tr>
+                <tr>
+                    <td>Charge</td>
+                    <td>{{book.charge}}</td>
+                </tr>
+                <tr>
+                    <td>Rent Duration (days)</td>
+                    <td>{{book.rentduration}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="columns is-multiline">
+        <div class="column is-12">
+            <h1 class="title">Book Units</h1>
+        </div>
+
+        <div class="column is-6">
+            <form action="/book-unit/add" method="POST">
+                <div class="field">
+                    <label class="label">Book Code</label>
+                    <div class="control">
+                        <input class="input" name="barcode" type="text" placeholder="">
+                    </div>
+                    <!-- <p class="help">This is a help text</p> -->
+                </div>
+
+                <input type="hidden" name="bookId" value="{{book.id}}">
+
+                <div class="tags has-addons">
+                    <span class="tag is-success">Add</span>
+                    <span class="tag">Remove</span>
+                </div>
+            </form>
+        </div>
+
+        <div class="column is-6"></div>
+
+        <div class="column is-6">
+            <table class="table is-fullwidth is-striped is-bordered is-hoverable">
+                <tr>
+                    <thead>
+                        <tr>
+                            <th>Sl</th>
+                            <th>Book Code</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bookunit in book.bookunits %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{ bookunit.barcode }}</td>
+                            <td>
+                                <form action="/book-unit/{{book.id}}/{{bookunit.id}}/delete" method="GET">
+                                    <button type="submit" class="button is-small is-danger is-rounded"><span class="icon"><i class="fa fa-trash"></i></span></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

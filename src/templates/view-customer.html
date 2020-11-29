@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    {% if customer == None %}
+    <div class="notification is-danger">
+        <button class="delete is-hidden"></button>
+        We were unable to find this customer
+    </div>
+    {% endif %}
+
+    {% if customer != None %}
+    <div class="columns">
+        <div class="column">
+            <h1 class="title">Customer Details</h1>
+        </div>
+    </div>
+
+    <div class="columns is-multiline">
+        <div class="column is-4">
+            <a href="/customers/{{customer.id}}/edit" class="button is-small is-rounded">
+                <span class="icon">
+                    <i class="fa fa-edit"></i>
+                </span>
+                <span>Edit</span>
+            </a>
+
+            <a href="" class="button is-small is-rounded">
+                <span class="icon">
+                    <i class="fa fa-trash"></i>
+                </span>
+                <span>Delete</span>
+            </a>
+        </div>
+
+        <div class="column is-2">
+            <a href="/customers" class="button is-small is-rounded is-pulled-right">
+                <span>Close</span>
+            </a>
+        </div>
+        <div class="column"></div>
+
+        <div class="column is-6">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth bold-title">
+                <tr>
+                    <td>Regn Number</td>
+                    <td>{{customer.regnum}}</td>
+                </tr>
+                <tr>
+                    <td>Customer Name</td>
+                    <td><strong>{{customer.name}}</strong></td>
+                </tr>
+                <tr>
+                    <td>Mobile</td>
+                    <td>{{customer.mobile}}</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>{{customer.email}}</td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td>{{customer.address}}</td>
+                </tr>
+                <tr>
+                    <td>Gender</td>
+                    <td>{{customer.gender}}</td>
+                </tr>
+                <tr>
+                    <td>Date of Birth</td>
+                    <td>{{customer.dob}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock %}

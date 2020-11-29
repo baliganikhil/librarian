@@ -1,0 +1,77 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    {% if customer != None and customer.id != None %}
+    <div class="notification is-success">
+        <button class="delete is-hidden"></button>
+        Customer has been registered successfully
+    </div>
+    {% endif %}
+
+    <div class="columns">
+        <div class="column">
+            <h1 class="title">Customer Details</h1>
+        </div>
+    </div>
+
+    <form action="/customers/add" method="POST">
+        <div class="columns is-multiline">
+
+            <div class="column is-12">
+                <button type="submit" class="button is-success is-small is-rounded">
+                    <span class="icon">
+                        <i class="fa fa-save"></i>
+                    </span>
+                    <span>Save</span>
+                </button>
+
+                <a href="/customers" class="button is-small is-rounded">
+                    <span>Cancel</span>
+                </a>
+            </div>
+
+            <div class="column is-6">
+                <table class="table is-bordered is-striped is-hoverable is-fullwidth bold-title">
+                    <tr>
+                        <td>Reg Num</td>
+                        <td><input type="text" value="000004" name="regnum" class="input"></td>
+                    </tr>
+                    <tr>
+                        <td>Customer Name</td>
+                        <td><input type="text" value="Amit Shah" name="name" class="input"></td>
+                    </tr>
+                    <tr>
+                        <td>Mobile</td>
+                        <td><input type="text" value="9876556789" name="mobile" class="input"></td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td><input type="text" value="amit.shah@gmail.com" name="email" class="input"></td>
+                    </tr>
+                    <tr>
+                        <td>Address</td>
+                        <td><input type="text" value="Amit Shah" name="address" class="input"></td>
+                    </tr>
+                    <tr>
+                        <td>Gender</td>
+                        <td>
+                            <div class="select is-fullwidth">
+                                <select name="gender">
+                                    <option value="MALE">Male</option>
+                                    <option value="FEMALE">Female</option>
+                                    <option value="UNKNOWN" selected>Unknown</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Date of Birth</td>
+                        <td><input type="date" name="dob" class="input"></td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </form>
+{% endblock %}
