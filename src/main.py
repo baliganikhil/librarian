@@ -32,11 +32,12 @@ def bookList():
 @app.route('/rentals/add/<customerId>', methods = ['GET', 'POST'])
 def addRentals(customerId):
     error = None
+    customer = CustomerService().get(customerId)
     activeRentals = RentalService().listActiveForCustomer(customerId)
     historicRentals = RentalService().listHistoryForCustomer(customerId)
 
     if request.method == 'GET':
-        return render_template('manage-rentals.html', customerId=customerId, cart=[], cartStr='[]', activeRentals=activeRentals, historicRentals=historicRentals)
+        return render_template('manage-rentals.html', customerId=customerId, cart=[], cartStr='[]', activeRentals=activeRentals, historicRentals=historicRentals, customer=customer)
 
     rentalObj = request.form
     barcode = rentalObj.get('barcode')
@@ -135,7 +136,9 @@ def bookunitDelete(bookId, bookunitId):
 
 @app.route('/books/outstanding', methods = ['GET'])
 def outstandingBooks():
-    return render_template('outstanding-books.html')
+    outstandingRentals = RentalService().listAllActive()
+    print(outstandingRentals)
+    return render_template('outstanding-books.html', outstandingRentals=outstandingRentals)
 
 @app.route('/customers', methods = ['GET'])
 def customerList():
@@ -151,10 +154,15 @@ def customerViewByRegnum():
     regnum = request.args.get('regnum')
     r = CustomerService().getByRegnum(regnum)
     return render_template('customer-search.html', customers=r)
-@app.route('/customers/<customerId>/edit', methods = ['GET'])
+@app.route('/customers/<customerId>/edit', methods = ['GET', 'POST'])
 def customerEdit(customerId):
     r = CustomerService().get(customerId)
-    return render_template('edit-customer.html', customer=r)
+    if request.method == 'GET':
+        return render_template('edit-customer.html', customer=r, successMsg=None)
+
+    customerObj = request.form
+    successMsg = CustomerService().update(customerId, customerObj)
+    return render_template('edit-customer.html', customer=r, successMsg=successMsg)
 
 @app.route('/customers/add', methods = ['GET', 'POST'])
 def customerAdd():

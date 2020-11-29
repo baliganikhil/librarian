@@ -72,10 +72,12 @@
 
     {% else %}
 
-    <div class="notification is-warning">
-        <button class="delete is-hidden"></button>
-        We were unable to find any customers
-    </div>
+
+    <article class="message is-warning">
+        <div class="message-body">
+            We were unable to find any customers
+        </div>
+    </article>
 
     {% endif %}
 {% endblock %}

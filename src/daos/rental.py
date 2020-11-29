@@ -22,7 +22,7 @@ class RentalDAO(BaseDAO):
     def insert(self, rental, commit=False):
         now = datetime.now()
         duedate = rental.get('duedate')
-        duedate = datetime.strptime(duedate, '%Y-%m-%d %H:%M:%S.%f')
+        duedate = datetime.strptime(duedate, '%Y-%m-%d %H:%M:%S')
 
         rental = Rentals(
             bookunitId = rental.get('bookunitId'),
@@ -46,6 +46,10 @@ class RentalDAO(BaseDAO):
 
     def listActiveForCustomer(self, customerId):
         rentals = Rentals.query.filter_by(customerId=customerId, status=RentalStatus.get('RENTED')).all()
+        return rentals
+
+    def listAllActive(self):
+        rentals = Rentals.query.filter_by(status=RentalStatus.get('RENTED')).all()
         return rentals
 
     def listHistoryForCustomer(self, customerId):

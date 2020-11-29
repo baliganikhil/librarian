@@ -31,6 +31,7 @@
         </div>
     </div>
 
+    {% if searchResults | length > 0 %}
     <hr>
 
     <div class="columns">
@@ -65,4 +66,16 @@
             </table>
         </div>
     </div>
+    {% endif %}
+
+    {% if searchResults | length == 0 %}
+    <div class="column">
+        <article class="message is-warning">
+            <div class="message-body">
+                No results found
+            </div>
+        </article>
+    </div>
+    {% endif %}
+
 {% endblock %}

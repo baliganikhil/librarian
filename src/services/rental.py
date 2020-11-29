@@ -5,6 +5,7 @@ from daos.rental import RentalDAO, RentalStatus
 
 from services.book import BookService
 from services.bookunit import BookunitService
+from services.customer import CustomerService
 
 class RentalService(BaseService):
     def processCartForDisplay(self, cart):
@@ -96,7 +97,6 @@ class RentalService(BaseService):
 
         return RentalDAO().markReturned(rentalIds), 'Rentals were marked as returned'
 
-
     def create(self, cart):
         cartSize = len(cart)
         i = 1
@@ -132,3 +132,17 @@ class RentalService(BaseService):
             historicRental.title = book.title
 
         return historicRentals
+
+    def listAllActive(self):
+        activeRentals = RentalDAO().listAllActive()
+
+        for activeRental in activeRentals:
+            bookunitId = activeRental.bookunitId
+            customerId = activeRental.customerId
+            book = BookunitService().getBookByBookunitId(bookunitId)
+            customer = CustomerService().get(customerId)
+
+            activeRental.title = book.title
+            activeRental.customerName = customer.name
+
+        return activeRentals

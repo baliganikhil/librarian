@@ -64,6 +64,10 @@ class CustomerDAO(BaseDAO):
 
         customer = Customers.query.get(customerId)
 
+        dob = customerObj.get('dob')
+        if dob == '':
+            dob = None
+
         customer.name = customerObj.get('name')
         customer.mobile = customerObj.get('mobile')
         customer.email = customerObj.get('email')
@@ -73,7 +77,7 @@ class CustomerDAO(BaseDAO):
         customer.updatedat = now
         customer.updatedby = customerObj.get('updatedby')
         customer.gender = customerObj.get('gender')
-        customer.dob = customerObj.get('dob')
+        customer.dob = dob
 
         db.session.commit()
         return 'Customer has been updated successfully'

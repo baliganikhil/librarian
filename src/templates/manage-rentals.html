@@ -16,7 +16,7 @@
 
 <div class="columns is-multiline">
     <div class="column is-6">
-        <h1 class="title">Add Rental</h1>
+        <h1 class="title">Add Rental for {{ customer.name }}</h1>
     </div>
 
     <div class="column is-6">
@@ -30,7 +30,7 @@
             <div class="field">
                 <label class="label">Book Code</label>
                 <div class="control">
-                    <input class="input" name="barcode" type="text" placeholder="">
+                    <input class="input" name="barcode" type="text" placeholder="" id="txtRentalBarcode">
                 </div>
                 <!-- <p class="help">This is a help text</p> -->
             </div>
@@ -180,5 +180,11 @@
     </div>
     {% endif %}
 </div>
+
+<script>
+    $(document).ready(() => {
+        $('#txtRentalBarcode').focus();
+    });
+</script>
 
 {% endblock %}

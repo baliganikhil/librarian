@@ -18,11 +18,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for outstandingRental in outstandingRentals %}
                     <tr>
-                        <td>1</td>
-                        <td><a href="/books/1">Harry Potter</a></td>
-                        <td><a href="/customers/1">Nikhil Baliga</a></td>
+                        <td>{{ loop.index }}</td>
+                        <td><a href="/books/{{outstandingRental.bookId}}">{{ outstandingRental.title }}</a></td>
+                        <td><a href="/customers/{{outstandingRental.customerId}}">{{ outstandingRental.customerName }}</a></td>
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
