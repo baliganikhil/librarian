@@ -2,3 +2,4 @@ Flask
 sqlalchemy
 flask_sqlalchemy
 SQLAlchemy-serializer
+pytest
