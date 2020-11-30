@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, make_response
 from flask.helpers import url_for
 from flask_sqlalchemy import SQLAlchemy
 import os
@@ -16,12 +16,22 @@ from services.bookunit import BookunitService
 from services.rental import RentalService
 
 @app.route('/')
-def hello_world():
-    r = CustomerService().get(1)
+def showIndex():
+    return render_template('login.html')
 
-    # print(r.fetchall())
-    # print(dir(r))
-    return 'Hello, World!'
+@app.route('/login', methods = ['POST'])
+def login():
+    loginObj = request.form
+    username = loginObj.get('username')
+    password = loginObj.get('password')
+
+    if username == 'admin' and password == 'admin':
+        resp = make_response(redirect(url_for('customerList')))
+        resp.set_cookie('username', username)
+        return resp
+
+    return redirect(url_for('showIndex'))
+
 
 @app.route('/book-search', methods = ['GET'])
 def bookList():
