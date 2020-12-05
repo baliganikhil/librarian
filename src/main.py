@@ -64,7 +64,7 @@ def addRentals(customerId):
     # cart, totalCharge = RentalService().processCartForDisplay(cart)
     cartStr = json.dumps(cart, cls=DateTimeEncoder)
 
-    return render_template('manage-rentals.html', customerId=customerId, cart=cart, cartStr=cartStr, activeRentals=activeRentals, historicRentals=historicRentals, totalCharge=totalCharge, error=error)
+    return render_template('manage-rentals.html', customerId=customerId, cart=cart, cartStr=cartStr, activeRentals=activeRentals, historicRentals=historicRentals, customer=customer, totalCharge=totalCharge, error=error)
 
 @app.route('/rentals/confirm/<customerId>', methods = ['POST'])
 def confirmRentals(customerId):
